@@ -1,0 +1,11 @@
+# Used for saving and file paths
+pathlib
+
+# Used to work with Windows
+pywin32
+
+# Used for regular expressions 
+re
+
+# Used to write dictionary to excel table
+pandas
