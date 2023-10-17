@@ -3,9 +3,11 @@ import win32com.client
 import re
 import pandas as pd
 
-
+print("Enter a file path!")
+filepath_input = input()
+filepath_input.encode('unicode_escape')
 # create output folder
-output_dir = Path(r'C:\Users\DZAIDI\OneDrive - HC-SC PHAC-ASPC\COIMail') 
+output_dir = Path((filepath_input)) 
 
 
 # connect to outlook
