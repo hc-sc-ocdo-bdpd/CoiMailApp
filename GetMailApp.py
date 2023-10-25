@@ -4,14 +4,19 @@ import re
 import pandas as pd
 
 
+import tkinter as tk
+from tkinter import simpledialog
 
-#print("Enter the file path you wish for the output! (Copy and Paste directly)")
-#filepath_input = input()
-#filepath_input.encode('unicode_escape')
+ROOT = tk.Tk() 
+ROOT.withdraw()
+
+filepath_input = simpledialog.askstring(title = "Path Input",
+                                  prompt="What is the filepath for the Output Folders? (Paste Directly!)")
+
+filepath_input.encode('unicode_escape')
+
 # create output folder
-#output_dir = Path((filepath_input)) 
-
-output_dir = Path(r'C:\Users\DZAIDI\Desktop\dummy')
+output_dir = Path((filepath_input)) 
 
 # connect to outlook
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
