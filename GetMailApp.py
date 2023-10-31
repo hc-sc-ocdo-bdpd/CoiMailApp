@@ -2,28 +2,29 @@ from pathlib import Path
 import win32com.client
 import re
 import pandas as pd
+import uuid
+
+# user input for output filepath
+# import tkinter as tk
+# from tkinter import simpledialog
+
+# ROOT = tk.Tk() 
+# ROOT.withdraw()
+
+# filepath_input = simpledialog.askstring(title = "Path Input",
+#                                   prompt="What is the filepath for the Output Folders? (Paste Directly!)")
+# filepath_input.encode('unicode_escape')
 
 
-import tkinter as tk
-from tkinter import simpledialog
-
-ROOT = tk.Tk() 
-ROOT.withdraw()
-
-filepath_input = simpledialog.askstring(title = "Path Input",
-                                  prompt="What is the filepath for the Output Folders? (Paste Directly!)")
-
-filepath_input.encode('unicode_escape')
-
-# create output folder
-output_dir = Path((filepath_input)) 
+output_dir = Path(r'C:\Users\DZAIDI\OneDrive - HC-SC PHAC-ASPC\COIMail')
 
 # connect to outlook
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
 
 
 # connect to inbox
-inbox = outlook.GetDefaultFolder(6).Folders["COI"]
+inbox = outlook.GetDefaultFolder(6)
+# .Folders["COI"]
 # Inbox folder reference = 6 -> https://learn.microsoft.com/en-us/office/vba/api/outlook.oldefaultfolders 
 
 # get messages
@@ -59,14 +60,13 @@ for message in messages:
     #update dictionary
     update_dict = {}
 
-    
+    unique_id = str(uuid.uuid4())
     subject = message.Subject
     body = message.body
     attachments = message.Attachments
     # sent = message.sentDateTime
-
+    update_dict["ID"] = unique_id
     update_dict["Subject"] = subject
-    # info_dict["Date"] = sent
 
     # initializing variables to store information
     RT = ''
@@ -171,7 +171,7 @@ for message in messages:
     target_folder = output_dir / str(name)
     target_folder.mkdir(parents=True, exist_ok=True)
 
-    
+
     # Save Attachments
     for attachment in attachments:
         attachment.SaveAsFile(target_folder / str(attachment))
@@ -183,6 +183,7 @@ df = pd.DataFrame.from_dict(data= info_dict)
 df = (df.T)
 df.drop(df.columns[0], axis=1)
 df.columns = df.columns.astype(str)
+
 
 # desired path for excel
 excel_path = output_dir / "COI_Forms.xlsx"
